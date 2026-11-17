@@ -2,12 +2,23 @@ import express, { Express, Request, Response } from 'express';
 import 'dotenv/config';
 import { prisma } from './lib/prisma.js';
 import suitcaseRoutes from './routes/suitcaseRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+
+
+import { correlationIdMiddleware } from './middlewares/correlationIdMiddleware.js';
+import { requestLoggingMiddleware } from './middlewares/requestLoggingMiddleware.js';
+import { exceptionMiddleware } from './middlewares/exceptionMiddleware.js';
+import { authLimiter } from './middlewares/rateLimiter.js';
 
 const app: Express = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
+app.use(correlationIdMiddleware);
+app.use(requestLoggingMiddleware);
+
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/suitcases', suitcaseRoutes);
 
 app.get('/api/health', async (req: Request, res: Response) => {
@@ -25,6 +36,8 @@ app.get('/api/health', async (req: Request, res: Response) => {
     });
   }
 });
+
+app.use(exceptionMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

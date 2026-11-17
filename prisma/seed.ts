@@ -19,6 +19,7 @@ async function main() {
   await prisma.suitcase.createMany({
     data: [
       {
+        sku: 'TRV-S-BLK-1234',
         title: 'TravelPro Cabin Pro',
         brand: 'TravelPro',
         price: 120.50,
@@ -28,6 +29,7 @@ async function main() {
         imageUrl: 'https://images.unsplash.com/photo-1581553680327-1ff028f04467?w=500',
       },
       {
+        sku: 'SAM-M-NBL-1234',
         title: 'Samsonite Volant Medium',
         brand: 'Samsonite',
         price: 210.00,
@@ -37,6 +39,7 @@ async function main() {
         imageUrl: 'https://images.unsplash.com/photo-1565026057447-bc90a3dcae87?w=500',
       },
       {
+        sku: 'AMR-L-YLW-1234',
         title: 'American Tourister Soundbox',
         brand: 'American Tourister',
         price: 180.00,

@@ -6,12 +6,18 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Role {
+  ADMIN
+  CUSTOMER
+}
 
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
+  refreshToken String?
   fullName  String?
+  role         Role     @default(CUSTOMER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -23,6 +29,7 @@ model User {
 
 model Suitcase {
   id          String   @id @default(uuid())
+  sku       String   @unique
   title       String
   brand       String
   price       Float
