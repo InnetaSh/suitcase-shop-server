@@ -1,0 +1,65 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  fullName  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]
+
+  @@map("users")
+}
+
+
+model Suitcase {
+  id          String   @id @default(uuid())
+  title       String
+  brand       String
+  price       Float
+  inStock     Int      @default(0)
+  color       String?
+  size        String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems  OrderItem[]
+
+  @@map("suitcases")
+}
+
+
+model Order {
+  id         String      @id @default(uuid())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalPrice Float
+  status     String      @default("PENDING")
+  createdAt  DateTime    @default(now())
+
+  items      OrderItem[]
+
+  @@map("orders")
+}
+
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  suitcaseId String
+  suitcase   Suitcase @relation(fields: [suitcaseId], references: [id])
+  quantity   Int      @default(1)
+
+  @@map("order_items")
+}
