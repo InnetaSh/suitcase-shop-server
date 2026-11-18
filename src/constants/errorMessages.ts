@@ -15,5 +15,7 @@ export const ErrorMessages = {
     FULL_NAME_SHORT: 'Full name is too short',
 
     SUITCASE_NOT_FOUND: 'Suitcase not found',
-    SUITCASE_ALREADY_EXISTS: 'Suitcase already exists'
+    SUITCASE_ALREADY_EXISTS: 'Suitcase already exists',
+
+     ORDER_NOT_FOUND: 'Order not found',
 } as const;

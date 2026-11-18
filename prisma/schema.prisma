@@ -47,26 +47,37 @@ model Suitcase {
 
 
 model Order {
-  id         String      @id @default(uuid())
-  userId     String
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  totalPrice Float
-  status     String      @default("PENDING")
-  createdAt  DateTime    @default(now())
-
-  items      OrderItem[]
-
-  @@map("orders")
+  id          String      @id @default(uuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  status      OrderStatus @default(PENDING)
+  totalPrice  Float
+  shippingAddress String
+  phone       String
+  
+  items       OrderItem[]
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
-
 model OrderItem {
-  id         String   @id @default(uuid())
-  orderId    String
-  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  suitcaseId String
-  suitcase   Suitcase @relation(fields: [suitcaseId], references: [id])
-  quantity   Int      @default(1)
+  id          String    @id @default(uuid())
+  orderId     String
+  order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  suitcaseId  String
+  suitcase    Suitcase  @relation(fields: [suitcaseId], references: [id])
+  
+  quantity    Int
+  price       Float
+}
 
-  @@map("order_items")
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }
